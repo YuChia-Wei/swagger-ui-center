@@ -26,7 +26,7 @@
     <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="8.0.1" />
     <PackageReference Include="Microsoft.AspNetCore.DataProtection.StackExchangeRedis" Version="8.0.1" />
     <PackageReference Include="Microsoft.Extensions.Caching.StackExchangeRedis" Version="8.0.1" />
-    <PackageReference Include="Microsoft.OpenApi.Readers" Version="1.6.10" />
+    <PackageReference Include="Microsoft.OpenApi.Readers" Version="1.6.13" />
     <PackageReference Include="StackExchange.Redis" Version="2.7.17" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
   </ItemGroup>
