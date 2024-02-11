@@ -1,0 +1,12 @@
+﻿{
+  "WebApiEndpoints": {
+    "Endpoints": [
+      {
+        "EnableSwagger": true,
+        "ServiceName": "swagger ui center local api",
+        "JsonUri": "/swagger/v1/swagger.json",
+        "ServerHostList": []
+      }
+    ]
+  }
+}
