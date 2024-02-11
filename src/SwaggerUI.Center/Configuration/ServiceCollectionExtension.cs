@@ -22,7 +22,7 @@ public static class ServiceCollectionExtension
     /// <param name="configurationManager"></param>
     public static ConfigurationManager AddOpenApiEndpointConfigurationJsons(this ConfigurationManager configurationManager)
     {
-        configurationManager.AddJsonFile(GetRealJsonPath(Path.Combine("Configuration", "swagger-endpoints.json")), true, true);
+        configurationManager.AddJsonFile(GetRealJsonPath(Path.Combine("Configuration", "OpenApi", "swagger-endpoints.json")), true, true);
 
         return configurationManager;
     }
