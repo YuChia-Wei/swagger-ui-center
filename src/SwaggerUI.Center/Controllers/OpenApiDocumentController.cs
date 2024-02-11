@@ -1,7 +1,11 @@
+using Mediator;
 using Microsoft.AspNetCore.Mvc;
-using SwaggerUI.Center.Components.Interfaces;
+using Microsoft.OpenApi;
+using Microsoft.OpenApi.Extensions;
+using Microsoft.OpenApi.Models;
+using SwaggerUI.Center.Components.Queries;
 
-namespace SwaggerUI.Center.ApiControllers;
+namespace SwaggerUI.Center.Controllers;
 
 /// <summary>
 /// 取得 OpenApi 文件
@@ -11,14 +15,14 @@ namespace SwaggerUI.Center.ApiControllers;
 [ApiExplorerSettings(IgnoreApi = true)]
 public class OpenApiDocumentController : ControllerBase
 {
-    private readonly IOpenApiDocumentService _openApiDocumentService;
+    private readonly IMediator _mediator;
 
     /// <summary>
     /// ctor
     /// </summary>
-    public OpenApiDocumentController(IOpenApiDocumentService openApiDocumentService)
+    public OpenApiDocumentController(IMediator mediator)
     {
-        this._openApiDocumentService = openApiDocumentService;
+        this._mediator = mediator;
     }
 
     /// <summary>
@@ -27,11 +31,12 @@ public class OpenApiDocumentController : ControllerBase
     /// <param name="serviceName"></param>
     /// <returns></returns>
     [HttpGet("{serviceName}")]
-    public async Task<string> Get([FromRoute] string serviceName)
+    public async Task<IActionResult> Get([FromRoute] string serviceName)
     {
         var httpContextRequest = this.HttpContext.Request;
         var requestUri = $"{httpContextRequest.Scheme}://{httpContextRequest.Host}";
-        var jsonAsync = await this._openApiDocumentService.GetJsonAsync(serviceName, requestUri);
-        return jsonAsync;
+        var jsonAsync = await this._mediator.Send(new OpenApiDocumentQuery(serviceName, requestUri));
+
+        return this.Ok(jsonAsync.SerializeAsJson<OpenApiDocument>(OpenApiSpecVersion.OpenApi3_0));
     }
 }

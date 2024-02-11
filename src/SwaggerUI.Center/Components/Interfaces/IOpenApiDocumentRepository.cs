@@ -1,5 +1,5 @@
 ﻿using Microsoft.OpenApi.Models;
-using SwaggerUI.Center.Components.OptionModels;
+using SwaggerUI.Center.Components.Domain;
 
 namespace SwaggerUI.Center.Components.Interfaces;
 
@@ -11,7 +11,7 @@ public interface IOpenApiDocumentRepository
     /// <summary>
     /// 取得 Open Api 文件
     /// </summary>
-    /// <param name="apiJsonEndpointOption"></param>
+    /// <param name="apiJsonEndpoint"></param>
     /// <returns></returns>
-    Task<OpenApiDocument> GetOpenApiDocumentAsync(OpenApiDocEndpointOption apiJsonEndpointOption);
+    Task<OpenApiDocument> GetOpenApiDocumentAsync(WebApiEndpoint apiJsonEndpoint);
 }

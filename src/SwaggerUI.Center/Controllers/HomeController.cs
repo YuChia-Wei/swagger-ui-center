@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace SwaggerUI.Center.Controllers;
@@ -5,15 +6,9 @@ namespace SwaggerUI.Center.Controllers;
 /// <summary>
 /// 首頁
 /// </summary>
+[Authorize]
 public class HomeController : Controller
 {
-    /// <summary>
-    /// ctor
-    /// </summary>
-    public HomeController()
-    {
-    }
-
     /// <summary>
     /// index
     /// </summary>

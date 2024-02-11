@@ -2,24 +2,24 @@
 using SwaggerUI.Center.Components.Interfaces;
 using Swashbuckle.AspNetCore.SwaggerUI;
 
-namespace SwaggerUI.Center.Infrastructure.ConfigureOptions;
+namespace SwaggerUI.Center.Swagger;
 
 /// <summary>
-/// SwaggerUiOption
+/// Swagger Ui Options Uri 設定
 /// </summary>
 /// <remarks>https://github.com/domaindrivendev/Swashbuckle.AspNetCore/issues/1093</remarks>
 public class SwaggerUiOptionsConfigure : IConfigureOptions<SwaggerUIOptions>
 {
-    private readonly IOpenApiDocumentEndpointService _openApiDocumentEndpointService;
+    private readonly IWebApiEndpointRepository _webApiEndpointRepository;
 
     /// <summary>
     /// ctor
     /// </summary>
-    /// <param name="openApiDocumentEndpointService"></param>
+    /// <param name="webApiEndpointRepository"></param>
     public SwaggerUiOptionsConfigure(
-        IOpenApiDocumentEndpointService openApiDocumentEndpointService)
+        IWebApiEndpointRepository webApiEndpointRepository)
     {
-        this._openApiDocumentEndpointService = openApiDocumentEndpointService;
+        this._webApiEndpointRepository = webApiEndpointRepository;
     }
 
     /// <summary>
@@ -27,8 +27,7 @@ public class SwaggerUiOptionsConfigure : IConfigureOptions<SwaggerUIOptions>
     /// <param name="options"></param>
     public void Configure(SwaggerUIOptions options)
     {
-        //Not really safe, but cant await here :(
-        var services = this._openApiDocumentEndpointService.GetListAsync().GetAwaiter().GetResult();
+        var services = this._webApiEndpointRepository.GetList();
 
         // options.RoutePrefix = "";
 

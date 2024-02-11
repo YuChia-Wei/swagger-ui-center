@@ -1,12 +1,12 @@
-﻿namespace SwaggerUI.Center.Infrastructure.Middleware;
+﻿namespace SwaggerUI.Center.Middleware;
 
 /// <summary>
 /// pipe line log Middleware
 /// </summary>
 public class PipeLineLogMiddleware
 {
+    private readonly string _msg;
     private readonly RequestDelegate _next;
-    private readonly string msg;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="PipeLineLogMiddleware" /> class.
@@ -16,7 +16,7 @@ public class PipeLineLogMiddleware
     public PipeLineLogMiddleware(RequestDelegate next, string msg)
     {
         this._next = next;
-        this.msg = msg;
+        this._msg = msg;
     }
 
     /// <summary>
@@ -30,7 +30,7 @@ public class PipeLineLogMiddleware
         Console.WriteLine($"Host: " + context.Request.Host);
         Console.WriteLine($"Protocol: " + context.Request.Protocol);
         Console.WriteLine($"Scheme: " + context.Request.Scheme);
-        Console.WriteLine($"Msg:  {this.msg}");
+        Console.WriteLine($"Msg:  {this._msg}");
         Console.WriteLine("===============");
         await this._next(context);
     }

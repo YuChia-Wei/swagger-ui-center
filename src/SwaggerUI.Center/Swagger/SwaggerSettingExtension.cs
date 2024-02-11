@@ -1,6 +1,6 @@
 ﻿using Microsoft.OpenApi.Models;
 
-namespace SwaggerUI.Center.Infrastructure.ServiceCollectionExtension;
+namespace SwaggerUI.Center.Swagger;
 
 /// <summary>
 /// Swagger 設定
@@ -17,7 +17,7 @@ public static class SwaggerSettingExtension
         {
             options.SwaggerDoc("v1", new OpenApiInfo
             {
-                Title = "Swagger UI V1",
+                Title = "Swagger center V1",
                 Version = "v1"
             });
 

@@ -1,7 +1,7 @@
 ﻿using Microsoft.OpenApi.Models;
 using Microsoft.OpenApi.Readers;
+using SwaggerUI.Center.Components.Domain;
 using SwaggerUI.Center.Components.Interfaces;
-using SwaggerUI.Center.Components.OptionModels;
 
 namespace SwaggerUI.Center.Components.Implements;
 
@@ -23,11 +23,11 @@ public class OpenApiDocumentRepository : IOpenApiDocumentRepository
     /// <summary>
     /// 取得 Open Api 文件
     /// </summary>
-    /// <param name="apiJsonEndpointOption"></param>
+    /// <param name="apiJsonEndpoint"></param>
     /// <returns></returns>
-    public async Task<OpenApiDocument> GetOpenApiDocumentAsync(OpenApiDocEndpointOption apiJsonEndpointOption)
+    public async Task<OpenApiDocument> GetOpenApiDocumentAsync(WebApiEndpoint apiJsonEndpoint)
     {
-        var openApiDocument = await this.DownloadOpenApiDocumentAsync(apiJsonEndpointOption);
+        var openApiDocument = await this.DownloadOpenApiDocumentAsync(apiJsonEndpoint);
 
         return openApiDocument;
     }
@@ -35,13 +35,13 @@ public class OpenApiDocumentRepository : IOpenApiDocumentRepository
     /// <summary>
     /// 下載外部的 OpenApi 文件
     /// </summary>
-    /// <param name="apiJsonEndpointOption"></param>
+    /// <param name="apiJsonEndpoint"></param>
     /// <returns></returns>
-    private async Task<OpenApiDocument> DownloadOpenApiDocumentAsync(OpenApiDocEndpointOption apiJsonEndpointOption)
+    private async Task<OpenApiDocument> DownloadOpenApiDocumentAsync(WebApiEndpoint apiJsonEndpoint)
     {
         var httpClient = this._httpClientFactory.CreateClient();
 
-        var stream = await httpClient.GetStreamAsync(apiJsonEndpointOption.JsonUri);
+        var stream = await httpClient.GetStreamAsync(apiJsonEndpoint.JsonUri);
 
         return new OpenApiStreamReader().Read(stream, out _);
     }

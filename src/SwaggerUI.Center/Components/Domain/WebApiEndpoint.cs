@@ -1,14 +1,14 @@
 ﻿using Microsoft.OpenApi.Models;
 
-namespace SwaggerUI.Center.Components.OptionModels;
+namespace SwaggerUI.Center.Components.Domain;
 
 /// <summary>
 /// WebAPI 資訊
 /// </summary>
-public class OpenApiDocEndpointOption
+public class WebApiEndpoint
 {
     /// <summary>Initializes a new instance of the <see cref="T:System.Object" /> class.</summary>
-    public OpenApiDocEndpointOption(string serviceName, Uri jsonUri)
+    public WebApiEndpoint(string serviceName, Uri jsonUri)
     {
         this.ServiceName = serviceName;
         this.JsonUri = jsonUri;
