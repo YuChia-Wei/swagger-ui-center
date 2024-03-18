@@ -14,3 +14,7 @@ docker run -d -p 8080:8080 -p 8443:8443 \
 ### import test client
 
 client id testing json : [link](./keyclock/test_client.json)
+
+## memo
+
+- [Swashbuckle.AspNetCore is being removed in .NET 9](https://github.com/dotnet/aspnetcore/issues/54599)
