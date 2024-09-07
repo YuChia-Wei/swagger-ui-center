@@ -1,9 +1,9 @@
-namespace SwaggerUI.Center.Middleware;
+namespace SwaggerUI.Center.Authorization;
 
 /// <summary>
 /// permission validator
 /// </summary>
-public class SwaggerUiPermissionValidator : ISwaggerUiPermissionValidator
+public class PermissionValidator : IPermissionValidator
 {
     public Task<bool> VerifyAsync(string? userName)
     {

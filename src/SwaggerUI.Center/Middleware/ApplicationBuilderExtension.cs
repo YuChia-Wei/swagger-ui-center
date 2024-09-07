@@ -13,14 +13,4 @@ public static class ApplicationBuilderExtension
     {
         return builder.UseMiddleware<DynamicSwaggerUiMiddleware>();
     }
-
-    /// <summary>
-    /// Swagger Ui Authorization
-    /// </summary>
-    /// <param name="builder"></param>
-    /// <returns></returns>
-    public static IApplicationBuilder UseSwaggerUiAuthorization(this IApplicationBuilder builder)
-    {
-        return builder.UseMiddleware<SwaggerUiAuthorizationMiddleware>();
-    }
 }

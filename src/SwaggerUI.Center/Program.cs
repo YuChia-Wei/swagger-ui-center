@@ -1,10 +1,12 @@
 using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Text.Unicode;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.HttpLogging;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.Extensions.Options;
 using SwaggerUI.Center.Authentication;
+using SwaggerUI.Center.Authorization;
 using SwaggerUI.Center.Components.Domain;
 using SwaggerUI.Center.Components.Implements;
 using SwaggerUI.Center.Components.Interfaces;
@@ -33,7 +35,36 @@ builder.Configuration.AddAuthenticationConfigurationJsons();
 builder.Services.Configure<WebApiEndpoints>(builder.Configuration.GetSection("WebApiEndpoints"));
 
 builder.Services.AddCustomAuthentication(builder.Configuration);
-builder.Services.AddAuthorization();
+
+builder.Services.AddAuthorization(options =>
+{
+    //使用外部權限控管 api 來驗證使用者可不可以使用此站台的認政策略
+    options.AddPolicy("permissionValidation", policy =>
+    {
+        policy.RequireAuthenticatedUser();
+        policy.RequirePermissionValidation();
+    });
+
+    //指定特定使用者才能用的認證策略
+    options.AddPolicy("specifyUser", policy =>
+    {
+        policy.RequireAuthenticatedUser();
+        policy.RequireUserName("userName");
+    });
+
+    //指定包含特定身分的使用者才能使用的認證策略
+    options.AddPolicy("specifyRole", policy =>
+    {
+        policy.RequireAuthenticatedUser();
+        policy.RequireRole("admin");
+    });
+
+    //定義全站的認證策略，除了有指定允許匿名外的資源都必須經過身份認證
+    options.FallbackPolicy = options.DefaultPolicy;
+});
+
+builder.Services.AddSingleton<IPermissionValidator, PermissionValidator>();
+builder.Services.AddSingleton<IAuthorizationHandler, PermissionValidationHandler>();
 
 // 處理中文轉碼
 builder.Services.AddSingleton(HtmlEncoder.Create(UnicodeRanges.BasicLatin,
@@ -56,15 +87,12 @@ builder.Services.AddHttpClient();
 
 builder.Services.AddMediator(options => options.ServiceLifetime = ServiceLifetime.Scoped);
 
-// 註冊 Repository
+// add Component
 builder.Services.AddScoped<IWebApiEndpointRepository, WebApiEndpointRepository>();
 builder.Services.AddScoped<IOpenApiDocumentRepository, OpenApiDocumentRepository>();
 
 builder.Services.AddScoped<IConfigureOptions<SwaggerUIOptions>, SwaggerUiOptionsConfigure>();
 builder.Services.AddScoped<DynamicSwaggerUiMiddleware>();
-builder.Services.AddScoped<SwaggerUiAuthorizationMiddleware>();
-
-builder.Services.AddScoped<ISwaggerUiPermissionValidator, SwaggerUiPermissionValidator>();
 
 // 開啟 CORS
 builder.Services.AddCors(options =>
@@ -115,8 +143,6 @@ app.UseCors("CorsPolicy");
 app.UseAuthentication();
 
 app.UseAuthorization();
-
-app.UseSwaggerUiAuthorization();
 
 app.UseDynamicSwaggerUi();
 
