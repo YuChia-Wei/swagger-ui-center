@@ -237,7 +237,7 @@ public static class AuthenticationBuilderExtension
     /// <param name="configurationManager"></param>
     /// <exception cref="ArgumentOutOfRangeException"></exception>
     /// <exception cref="ArgumentNullException"></exception>
-    public static void AddSwaggerAuthentication(this IServiceCollection serviceCollection, ConfigurationManager configurationManager)
+    public static void AddCustomAuthentication(this IServiceCollection serviceCollection, ConfigurationManager configurationManager)
     {
         var swaggerAuthSettingOptions = configurationManager.GetSection("Auth").Get<SwaggerAuthSettingOptions>();
 

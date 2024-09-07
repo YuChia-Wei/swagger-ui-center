@@ -32,7 +32,7 @@ builder.Configuration.AddAuthenticationConfigurationJsons();
 
 builder.Services.Configure<WebApiEndpoints>(builder.Configuration.GetSection("WebApiEndpoints"));
 
-builder.Services.AddSwaggerAuthentication(builder.Configuration);
+builder.Services.AddCustomAuthentication(builder.Configuration);
 builder.Services.AddAuthorization();
 
 // 處理中文轉碼
