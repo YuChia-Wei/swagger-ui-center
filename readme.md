@@ -8,7 +8,7 @@ docker run -d -p 6379:6379 --name local-redis redis
 
 ## key clock prepare
 
-### run key-clock
+### run keycloak
 
 ```bash
 docker run -d -p 8080:8080 -p 8443:8443 \
@@ -19,12 +19,12 @@ docker run -d -p 8080:8080 -p 8443:8443 \
 
 ### import test client
 
-client id testing json : [link](./keyclock/test_client.json)
+client id testing json : [link](./keycloak/test_client.json)
 
 - open clients page
-    ![keyclock-clients-page.png](./img/keyclock-clients-page.png)
+    ![keycloak-clients-page.png](./img/keycloak-clients-page.png)
 - click import client
-    ![keyclock-clients-import-button.png](./img/keyclock-clients-import-button.png)
+    ![keycloak-clients-import-button.png](./img/keycloak-clients-import-button.png)
 
 ## memo
 
