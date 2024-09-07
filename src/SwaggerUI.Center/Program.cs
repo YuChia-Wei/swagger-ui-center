@@ -1,6 +1,7 @@
 using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Text.Unicode;
+using Microsoft.AspNetCore.HttpLogging;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.Extensions.Options;
 using SwaggerUI.Center.Authentication;
@@ -14,10 +15,21 @@ using Swashbuckle.AspNetCore.SwaggerUI;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddLogging();
+builder.Services.AddHttpLogging(options =>
+{
+    // logging fields can via. https://learn.microsoft.com/en-us/aspnet/core/fundamentals/http-logging/?view=aspnetcore-7.0#loggingfields
+    options.LoggingFields = HttpLoggingFields.RequestPropertiesAndHeaders |
+                            HttpLoggingFields.ResponsePropertiesAndHeaders;
+
+    // 加上這個可以將指定的 http header 從 log 中加入/移除
+    // options.RequestHeaders.Add("SomeRequestHeader");
+    // options.RequestHeaders.Remove("Cookie");
+    // options.ResponseHeaders.Add("SomeResponseHeader");
+});
 
 builder.Configuration.AddOpenApiEndpointConfigurationJsons();
 builder.Configuration.AddAuthenticationConfigurationJsons();
+
 builder.Services.Configure<WebApiEndpoints>(builder.Configuration.GetSection("WebApiEndpoints"));
 
 builder.Services.AddSwaggerAuthentication(builder.Configuration);
@@ -42,7 +54,7 @@ builder.Services.AddOpenApiDocGenerate();
 
 builder.Services.AddHttpClient();
 
-builder.Services.AddMediator(options=> options.ServiceLifetime = ServiceLifetime.Scoped);
+builder.Services.AddMediator(options => options.ServiceLifetime = ServiceLifetime.Scoped);
 
 // 註冊 Repository
 builder.Services.AddScoped<IWebApiEndpointRepository, WebApiEndpointRepository>();
@@ -75,25 +87,26 @@ builder.Services.Configure<ForwardedHeadersOptions>(options =>
 builder.Services.AddEndpointsApiExplorer();
 
 builder.Services.AddHealthChecks();
-
 var app = builder.Build();
-
-app.UseHealthChecks("/health");
-
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    //開發時期才啟用內部 swagger json endpoint
-    app.UseSwagger();
-
-    app.UseDeveloperExceptionPage();
-}
 
 app.UseForwardedHeaders(new ForwardedHeadersOptions
 {
     ForwardedHeaders = ForwardedHeaders.XForwardedFor |
                        ForwardedHeaders.XForwardedProto
 });
+
+app.UseHealthChecks("/health");
+
+app.UseHttpLogging();
+
+// Configure the HTTP request pipeline.
+if (app.Environment.IsDevelopment())
+{
+    //開發模式下才提供本站的 open api json
+    app.UseSwagger();
+
+    app.UseDeveloperExceptionPage();
+}
 
 app.UseRouting();
 
